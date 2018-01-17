@@ -31,18 +31,15 @@
         android:id="@+id/about_copyright"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/about_copyright"
         android:textColor="?android:attr/textColorSecondary"/>
 
-    <TextView
-        android:id="@+id/about_weblink"
+    <include
+        layout="@layout/about_web_url"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:autoLink="web"
-        android:text="@string/about_weblink"
-        android:textColor="?android:attr/textColorSecondary"/>
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/about_email"
