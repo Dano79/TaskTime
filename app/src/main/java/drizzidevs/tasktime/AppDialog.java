@@ -1,19 +1,20 @@
 package drizzidevs.tasktime;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 
 /**
  * Created by danielodorizzi on 1/12/18.
+ *
  */
 
-public class AppDialog extends DialogFragment {
+public class AppDialog extends AppCompatDialogFragment {
     private static final String TAG = "AppDialog";
 
     public static final String DIALOG_ID = "id";
@@ -119,37 +120,4 @@ public class AppDialog extends DialogFragment {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

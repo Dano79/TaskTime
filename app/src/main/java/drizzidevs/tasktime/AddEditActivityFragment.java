@@ -1,11 +1,14 @@
 package drizzidevs.tasktime;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,14 +26,13 @@ public class AddEditActivityFragment extends Fragment {
         return false;
     }
 
-    public enum FragmentEditMode {EDIT, ADD}
+    private enum FragmentEditMode {EDIT, ADD}
 
     private FragmentEditMode mMode;
 
     private EditText mNameTextView;
     private EditText mDescriptionTextView;
     private EditText mSortOrderTextView;
-    private Button mSaveButton;
     private OnSaveClicked mSaveListener = null;
 
     interface OnSaveClicked {
@@ -55,12 +57,26 @@ public class AddEditActivityFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
     public void onDetach() {
         Log.d(TAG, "onDetach: starts");
         super.onDetach();
         mSaveListener = null;
+        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,7 +86,7 @@ public class AddEditActivityFragment extends Fragment {
         mNameTextView = view.findViewById(R.id.addedit_name);
         mDescriptionTextView = view.findViewById(R.id.addedit_description);
         mSortOrderTextView = view.findViewById(R.id.addedit_sortorder);
-        mSaveButton = view.findViewById(R.id.addedit_save);
+        Button saveButton = view.findViewById(R.id.addedit_save);
 
         //Bundle arguments = getActivity().getIntent().getExtras(); // Bad code will be changed;
         Bundle arguments = getArguments();
@@ -97,7 +113,7 @@ public class AddEditActivityFragment extends Fragment {
             mMode = FragmentEditMode.ADD;
 
         }
-            mSaveButton.setOnClickListener(new View.OnClickListener() {
+            saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // UPDATE THE DATABASE IF AT LEAST ONE FIELD HAS CHANGED.
@@ -114,6 +130,9 @@ public class AddEditActivityFragment extends Fragment {
 
                     switch (mMode) {
                         case EDIT:
+                            if (task == null) {
+                                break;
+                            }
                             if (!mNameTextView.getText().toString().equals(task.getName())) {
                                 values.put(TasksContract.Columns.TASKS_NAME, mNameTextView.getText().toString());
                             }

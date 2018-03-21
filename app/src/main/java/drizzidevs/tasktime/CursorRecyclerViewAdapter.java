@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 /**
- * Created by danielodorizzi on 1/7/18.
+ * Created by danielodorizzi on 1/7/18.*
  */
 
 class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewAdapter.TaskViewHolder> {
@@ -30,6 +30,9 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
         mListener = listener;
     }
 
+//    public void setListener(OnTaskClickListener listener) {
+//        mListener = listener;
+//    }
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -49,7 +52,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
             holder.deleteButton.setVisibility(View.GONE);
         } else {
             if (!mCursor.moveToPosition(position)) {
-                throw new IllegalStateException("Couldnt move cursor to position " + position);
+                throw new IllegalStateException("Couldn't move cursor to position " + position);
             }
 
             final Task task = new Task(mCursor.getLong(mCursor.getColumnIndex(TasksContract.Columns._ID)),
@@ -60,8 +63,8 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
 
             holder.name.setText(task.getName());
             holder.description.setText(task.getDescription());
-            holder.editButton.setVisibility(View.VISIBLE); // TODO add onClick listener
-            holder.deleteButton.setVisibility(View.VISIBLE); //TODO add onClick listener
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.VISIBLE);
 
             View.OnClickListener buttonListener = new View.OnClickListener() {
                 @Override

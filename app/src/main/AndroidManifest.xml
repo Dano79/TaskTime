@@ -25,15 +25,6 @@
             android:authorities="drizzidevs.tasktime.provider"
             android:exported="false"/>
 
-        <activity
-            android:name=".AddEditActivity"
-            android:label="@string/title_activity_add_edit"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="drizzidevs.tasktime.MainActivity"/>
-        </activity>
     </application>
 
 </manifest>
