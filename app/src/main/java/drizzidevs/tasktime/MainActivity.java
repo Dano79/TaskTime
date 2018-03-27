@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -30,11 +31,10 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
    
     public static final int DIALOG_ID_DELETE = 1;
     public static final int DIALOG_ID_CANCEL_EDIT = 2;
-
     private static final int DIALOG_ID_CANCEL_EDIT_UP = 3;
 
-    private AlertDialog mDialog = null;     // module scope because we need to dismiss it in onStop
-                                            // e.g. when orientation changes to avoid memory leaks;
+    private AlertDialog mDialog = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,12 +195,12 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
 
 
     @Override
-    public void onEditClick(Task task) {
+    public void onEditClick(@NonNull Task task) {
         taskEditRequest(task);
     }
 
     @Override
-    public void onDeleteClick(Task task) {
+    public void onDeleteClick(@NonNull Task task) {
         Log.d(TAG, "onDeleteClick: starts");
 
         AppDialog dialog = new AppDialog();
@@ -353,7 +353,11 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
 
     }
 
+    @Override
+    public void onTaskLongClick(@NonNull Task task) {
+        // Required to satisfy the interface
 
+    }
 }
 
 

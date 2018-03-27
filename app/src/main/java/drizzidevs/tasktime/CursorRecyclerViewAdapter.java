@@ -1,6 +1,7 @@
 package drizzidevs.tasktime;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,9 +20,9 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
     private OnTaskClickListener mListener;
 
     interface OnTaskClickListener {
-        void onEditClick(Task task);
-
-        void onDeleteClick(Task task);
+        void onEditClick(@NonNull Task task);
+        void onDeleteClick(@NonNull Task task);
+        void onTaskLongClick(@NonNull Task task);
     }
 
     public CursorRecyclerViewAdapter(Cursor cursor, OnTaskClickListener listener) {
@@ -30,9 +31,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
         mListener = listener;
     }
 
-//    public void setListener(OnTaskClickListener listener) {
-//        mListener = listener;
-//    }
+
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -85,12 +84,26 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
                             Log.d(TAG, "onClick: found unexpected button id");
 
                     }
-//                    Log.d(TAG, "onClick: button with id " + view.getId() + " clicked");
-//                    Log.d(TAG, "onClick: task name is " + task.getName());
+
                 }
             };
+
+            View.OnLongClickListener buttonLongListener = new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.d(TAG, "onLongClick starts");
+                    if (mListener != null) {
+                        mListener.onTaskLongClick(task);
+                        return true;
+                    }
+                    return false;
+
+                }
+            };
+
             holder.editButton.setOnClickListener(buttonListener);
             holder.deleteButton.setOnClickListener(buttonListener);
+            holder.itemView.setOnLongClickListener(buttonLongListener);
 
 
         }
@@ -130,21 +143,23 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
 
 
     static class TaskViewHolder extends RecyclerView.ViewHolder {
-        private static final String TAG = "taskViewHolder";
+//        private static final String TAG = "taskViewHolder";
 
-        TextView name = null;
-        TextView description = null;
-        ImageButton editButton = null;
-        ImageButton deleteButton = null;
+        TextView name;
+        TextView description;
+        ImageButton editButton;
+        ImageButton deleteButton;
+        View itemView;
+
 
         public TaskViewHolder(View itemView) {
             super(itemView);
-           // Log.d(TAG, "taskViewHolder: starts");
 
             this.name = itemView.findViewById(R.id.tli_name);
             this.description = itemView.findViewById(R.id.tli_description);
             this.editButton = itemView.findViewById(R.id.tli_edit);
             this.deleteButton = itemView.findViewById(R.id.tli_delete);
+            this.itemView = itemView;
         }
     }
 }

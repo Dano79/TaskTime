@@ -17,9 +17,9 @@
     <string name="instructions_heading">Instructions</string>
     <string name="instructions">Use the add button (+) in the toolbar above to create new tasks and so on.</string>
     <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
+    <string name="cancel">Cancel</string>
     <string name="deldiag_positive_caption">Delete</string>
-    <string name="deldiag_message">Deleting will also delete all timing data associated with task %1$d: %2$s.</string>
+    <string name="deldiag_message">Deleting will also delete all timing data associated with task id %1$d: %2$s.</string>
     <string name="cancelEditDiag_message">You have unsaved changes. Do you want to abandon your changes, or continue editing?</string>
     <string name="cancelEditDiag_positive_caption">Continue editing</string>
     <string name="cancelEditDiag_negative_caption">Abandon changes</string>
@@ -29,4 +29,5 @@
     <string name="about_weblink_21">Instructions available at www.learnprogramming.academy</string>
     <string name="about_email">For support email danielsreef79@gmail.com</string>
     <string name="about_credits">Icon derived from <b> analog clock</b> at openclipart.org by <b>Anonymous</b></string>
+    <string name="current_timing_text">Timing %1$s</string>
 </resources>
