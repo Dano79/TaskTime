@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import drizzidevs.tasktime.debug.TestData;
+
 public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapter.OnTaskClickListener,
                                                                        AddEditActivityFragment.OnSaveClicked,
                                                                        AppDialog.DialogEvents {
@@ -109,6 +111,11 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if(BuildConfig.DEBUG) {
+          MenuItem generate = menu.findItem(R.id.menumain_generate);
+          generate.setVisible(true);
+        }
         return true;
     }
 
@@ -130,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
                 showAboutDialog();
                 break;
             case R.id.menumain_generate:
+                TestData.generateTestData(getContentResolver());
                 break;
             case android.R.id.home:
                 Log.d(TAG, "onOptionsItemSelected: home button pressed");

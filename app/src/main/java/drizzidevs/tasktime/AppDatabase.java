@@ -15,7 +15,7 @@ class AppDatabase extends SQLiteOpenHelper {
     private static final String TAG = "AppDatabase";
 
     public static final String DATABASE_NAME = "TaskTime.db";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     // Implement AppDatabase as a Singleton
     private static AppDatabase instance = null;
@@ -52,6 +52,9 @@ class AppDatabase extends SQLiteOpenHelper {
         Log.d(TAG, sSQL);
         db.execSQL(sSQL);
 
+        addTimingsTable(db);
+        addDurationsView(db);
+
         Log.d(TAG, "onCreate: ends");
     }
 
@@ -60,8 +63,12 @@ class AppDatabase extends SQLiteOpenHelper {
         Log.d(TAG, "onUpgrade: starts");
         switch(oldVersion) {
             case 1:
-                // upgrade logic from version
+                // upgrade logic from version 1
                 addTimingsTable(db);
+               // fall through, to include version 2
+            case 2:
+                // upgrade logic from version 2
+                addDurationsView(db);
                 break;
             default:
                 throw new IllegalStateException("onUpgrade() with unknown newVersion: " + newVersion);
@@ -86,6 +93,38 @@ class AppDatabase extends SQLiteOpenHelper {
                 + " DELETE FROM " + TimingsContract.TABLE_NAME
                 + " WHERE " + TimingsContract.Columns.TIMINGS_TASK_ID + " = OLD." + TasksContract.Columns._ID + ";"
                 + " END;";
+        Log.d(TAG, sSQL);
+        db.execSQL(sSQL);
+    }
+
+    private void addDurationsView(SQLiteDatabase db) {
+        /*
+        CREATE VIEW vwTaskDurations AS
+        select timings id
+        tasks.name
+        tasks.description
+        Timings.StartTime
+        DATE(Timings.StartTime, 'unixepoch') AS startDate,
+        sum(timings.duration) as duration
+        from tasks inner join timings
+        on tasks._ID startDate
+
+         */
+
+        String sSQL = "CREATE VIEW " + DurationsContract.TABLE_NAME
+                + " AS SELECT " + TimingsContract.TABLE_NAME + "." + TimingsContract.Columns._ID + ", "
+                + TasksContract.TABLE_NAME + "." + TasksContract.Columns.TASKS_NAME + " ,"
+                + TasksContract.TABLE_NAME + "." + TasksContract.Columns.TASKS_DESCRIPTION + ", "
+                + TimingsContract.TABLE_NAME + "." + TimingsContract.Columns.TIMINGS_START_TIME + ", "
+                + " DATE(" + TimingsContract.TABLE_NAME + "." + TimingsContract.Columns.TIMINGS_START_TIME + ",  'unixepoch')"
+                + " AS " + DurationsContract.Columns.DURATIONS_START_DATE + ","
+                + " SUM(" + TimingsContract.TABLE_NAME + "." + TimingsContract.Columns.TIMINGS_DURATION + ")"
+                + " AS " + DurationsContract.Columns.DURATIONS_DURATION
+                + " FROM " + TasksContract.TABLE_NAME + " JOIN " + TimingsContract.TABLE_NAME
+                + " ON " + TasksContract.TABLE_NAME + "." + TasksContract.Columns._ID + " = "
+                + TimingsContract.TABLE_NAME + "." + TimingsContract.Columns.TIMINGS_TASK_ID
+                + " GROUP BY " + DurationsContract.Columns.DURATIONS_START_DATE + ", " + DurationsContract.Columns.DURATIONS_NAME
+                + ";";
         Log.d(TAG, sSQL);
         db.execSQL(sSQL);
     }
