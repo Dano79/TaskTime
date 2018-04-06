@@ -30,4 +30,7 @@
     <string name="about_email">For support email danielsreef79@gmail.com</string>
     <string name="about_credits">Icon derived from <b> analog clock</b> at openclipart.org by <b>Anonymous</b></string>
     <string name="current_timing_text">Timing %1$s</string>
+    <string name="td_text_name">Task name</string>
+    <string name="td_text_date">Date</string>
+    <string name="td_text_duration">Duration</string>
 </resources>
