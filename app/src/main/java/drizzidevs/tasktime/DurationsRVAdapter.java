@@ -57,9 +57,14 @@ public class DurationsRVAdapter extends RecyclerView.Adapter<DurationsRVAdapter.
 
     }
 
+//    @Override
+//    public int getItemCount() {
+//        return mCursor != null ? mCursor.getCount() : 0;
+//    }
+
     @Override
     public int getItemCount() {
-        return mCursor != null ? mCursor.getCount() : 0;
+    return mCursor != null ? mCursor.getCount() : 0;
     }
 
     private String formatDuration(long duration) {
@@ -76,12 +81,14 @@ public class DurationsRVAdapter extends RecyclerView.Adapter<DurationsRVAdapter.
             return null;
         }
 
+        int numItems = getItemCount(); // store old item count;
+
         final Cursor oldCursor = mCursor;
         mCursor = newCursor;
         if (newCursor != null) {
             notifyDataSetChanged();
         } else {
-            notifyItemRangeRemoved(0, getItemCount());
+            notifyItemRangeRemoved(0, numItems); // Use the old count;
         }
         return oldCursor;
     }
