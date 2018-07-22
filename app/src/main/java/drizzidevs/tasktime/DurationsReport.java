@@ -14,6 +14,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.security.InvalidParameterException;
 import java.util.GregorianCalendar;
@@ -63,6 +65,51 @@ public class DurationsReport extends AppCompatActivity implements LoaderManager.
 
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_report, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.rm_filter_period:
+                mDisplayWeek = !mDisplayWeek;
+                //TODO applyFilter();
+                invalidateOptionsMenu(); // force call to onPrepareOptionsMenu to redraw our changed menu
+                getSupportLoaderManager().restartLoader(LOADER_ID, mArgs, this);
+                return true;
+            case R.id.rm_filter_date:
+                //TODO showDatePickerDialog(); // The actual filtering is done in onDateSet();
+                return true;
+            case R.id.rm_delete:
+                //TODO showDatePickerDialog(); // The actual deleting is done in onDateSet();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.rm_filter_period);
+        if (item != null) {
+            // switch icon and title to represent 7 days or 1 day
+            // as appropriate to the future function of the menu item.
+            if (mDisplayWeek) {
+                item.setIcon(R.drawable.ic_filter_1_black_24dp);
+                item.setTitle(R.string.rm_title_filter_day);
+            } else {
+                item.setIcon(R.drawable.ic_filter_7_black_24dp);
+                item.setTitle(R.string.rm_title_filter_week);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @NonNull
