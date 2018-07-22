@@ -61,6 +61,8 @@ public class DurationsReport extends AppCompatActivity implements LoaderManager.
 
         getSupportLoaderManager().initLoader(LOADER_ID, mArgs, this);
 
+
+
     }
 
     @NonNull
