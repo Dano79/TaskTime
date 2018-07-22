@@ -1,10 +1,12 @@
 package drizzidevs.tasktime;
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -16,11 +18,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 
 import java.security.InvalidParameterException;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
-public class DurationsReport extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DurationsReport extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, DatePickerDialog.OnDateSetListener {
 
     private static  final String TAG = "DurationsReport";
 
@@ -54,6 +59,8 @@ public class DurationsReport extends AppCompatActivity implements LoaderManager.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        applyFilter();
+
         RecyclerView recyclerView = findViewById(R.id.td_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if (mAdapter == null) {
@@ -81,7 +88,7 @@ public class DurationsReport extends AppCompatActivity implements LoaderManager.
         switch (id) {
             case R.id.rm_filter_period:
                 mDisplayWeek = !mDisplayWeek;
-                //TODO applyFilter();
+                applyFilter();
                 invalidateOptionsMenu(); // force call to onPrepareOptionsMenu to redraw our changed menu
                 getSupportLoaderManager().restartLoader(LOADER_ID, mArgs, this);
                 return true;
@@ -110,6 +117,79 @@ public class DurationsReport extends AppCompatActivity implements LoaderManager.
             }
         }
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void showDatePickerDialog(String title, int dialogId) {
+        Log.d(TAG, "Entering showDatePickerDialog");
+        DialogFragment dialogFragment = new DatePickerFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putInt(DatePickerFragment.DATE_PICKER_ID, dialogId);
+        arguments.putString(DatePickerFragment.DATE_PICKER_TITLE, title);
+        arguments.putSerializable(DatePickerFragment.DATE_PICKER_DATE, mCalendar.getTime());
+
+        dialogFragment.setArguments(arguments);
+        dialogFragment.show(getSupportFragmentManager(), "datePicker");
+        Log.d(TAG, "Exiting DatePickerDialog");
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Log.d(TAG, "onDateSet: called");
+
+        int dialogId = (int) view.getTag();
+
+    }
+
+    private void applyFilter() {
+        Log.d(TAG, "Entering applyFilter");
+
+        if (mDisplayWeek) {
+            // show records for the entire week
+            Date currentCalenderDate = mCalendar.getTime();
+
+            int dayOfWeek = mCalendar.get(GregorianCalendar.DAY_OF_WEEK);
+            int weekStart = mCalendar.getFirstDayOfWeek();
+            Log.d(TAG, "applyFilter: first day of calender week is " + weekStart);
+            Log.d(TAG, "applyFilter: day of week is " + dayOfWeek);
+            Log.d(TAG, "applyFilter: date is " + mCalendar.getTime());
+
+            // calculate week start and end dates
+            mCalendar.set(GregorianCalendar.DAY_OF_WEEK, weekStart);
+
+            String startDate = String.format(Locale.US, "%04d-%02d-%02d",
+                    mCalendar.get(GregorianCalendar.YEAR),
+                    mCalendar.get(GregorianCalendar.MONTH) + 1,
+                    mCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+
+            mCalendar.add(GregorianCalendar.DATE, 6); // move forward six days to get the last day of the week;
+
+            String endDate = String.format(Locale.US, "%04d-%02d-%02d",
+                    mCalendar.get(GregorianCalendar.YEAR),
+                    mCalendar.get(GregorianCalendar.MONTH) + 1,
+                    mCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+
+            String[] selectionArgs = new String[] { startDate, endDate};
+            // put the calender back to where it was before we started jumping back and forth
+            mCalendar.setTime(currentCalenderDate);
+
+            Log.d(TAG, "In applyFilter(7), Start date is " + startDate + ", End date is " + endDate);
+            mArgs.putString(SELECTION_PARAM, "StartDate Between ? AND ?");
+            mArgs.putStringArray(SELECTION_ARGS_PARAM, selectionArgs);
+
+        } else {
+            // re query for the current day.
+            String startDate = String.format(Locale.US, "%04d-%02d-%02d",
+                    mCalendar.get(GregorianCalendar.YEAR),
+                    mCalendar.get(GregorianCalendar.MONTH) + 1,
+                    mCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+            
+            String[] selectionArgs = new String[]{startDate};
+            Log.d(TAG, "In applyFilter(1), Start date is " + startDate);
+            mArgs.putString(SELECTION_PARAM, "StartDate = ?");
+            mArgs.putStringArray(SELECTION_ARGS_PARAM, selectionArgs);
+        }
     }
 
     @NonNull
