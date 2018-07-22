@@ -33,4 +33,6 @@
     <string name="td_text_name">Task name</string>
     <string name="td_text_date">Date</string>
     <string name="td_text_duration">Duration</string>
+    <string name="td_text_description">Description</string>
+    <string name="title_activity_durations_report">DurationsReport</string>
 </resources>

@@ -10,6 +10,8 @@
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menumain_showDurations"
+        android:checkable="false"
+        android:enabled="true"
         android:icon="@android:drawable/ic_menu_view"
         android:orderInCategory="101"
         android:title="@string/menumain_showDurations"

@@ -24,6 +24,15 @@
             android:authorities="drizzidevs.tasktime.provider"
             android:exported="false"/>
 
+        <activity
+            android:name=".DurationsReport"
+            android:label="@string/title_activity_durations_report"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="drizzidevs.tasktime.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

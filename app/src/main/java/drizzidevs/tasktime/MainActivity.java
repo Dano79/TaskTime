@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
                 taskEditRequest(null);
                 break;
             case R.id.menumain_showDurations:
+               startActivity(new Intent (this, DurationsReport.class));
                 break;
             case R.id.menumain_showAbout:
                 showAboutDialog();

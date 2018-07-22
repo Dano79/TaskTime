@@ -157,6 +157,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         setRetainInstance(true);
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "onCreateLoader: starts with id" + id);

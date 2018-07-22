@@ -35,7 +35,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      //  Log.d(TAG, "onCreateViewHolder: new view requested");
+        //  Log.d(TAG, "onCreateViewHolder: new view requested");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_list_items, parent, false);
         return new TaskViewHolder(view);
     }
@@ -76,13 +76,12 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
                             }
                             break;
                         case R.id.tli_delete:
-                            if (mListener != null) {
+                            if(mListener != null) {
                                 mListener.onDeleteClick(task);
                             }
                             break;
                         default:
                             Log.d(TAG, "onClick: found unexpected button id");
-
                     }
 
                 }
@@ -92,35 +91,29 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
                 @Override
                 public boolean onLongClick(View v) {
                     Log.d(TAG, "onLongClick starts");
-                    if (mListener != null) {
+                    if(mListener != null) {
                         mListener.onTaskLongClick(task);
                         return true;
                     }
                     return false;
-
                 }
             };
 
             holder.editButton.setOnClickListener(buttonListener);
             holder.deleteButton.setOnClickListener(buttonListener);
             holder.itemView.setOnLongClickListener(buttonLongListener);
-
-
         }
 
     }
 
-
     @Override
     public int getItemCount() {
-        //Log.d(TAG, "getItemCount: starts");
-        if ((mCursor == null) || (mCursor.getCount() == 0)) {
+//        Log.d(TAG, "getItemCount: starts");
+        if((mCursor == null) || (mCursor.getCount() == 0)) {
             return 1;
         } else {
             return mCursor.getCount();
-
         }
-
     }
 
 
@@ -131,7 +124,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
 
         final Cursor oldCursor = mCursor;
         mCursor = newCursor;
-        if (newCursor != null) {
+        if(newCursor != null) {
             notifyDataSetChanged();
         } else {
             // notify the observers about the lack of a data set;
@@ -141,7 +134,6 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
 
     }
 
-
     static class TaskViewHolder extends RecyclerView.ViewHolder {
 //        private static final String TAG = "taskViewHolder";
 
@@ -150,7 +142,6 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
         ImageButton editButton;
         ImageButton deleteButton;
         View itemView;
-
 
         public TaskViewHolder(View itemView) {
             super(itemView);
@@ -163,26 +154,3 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
